@@ -58,3 +58,4 @@ Sirve para levantar el contenedor nada mas y hacerlo funcionar.
     make up
 ```
 
+Atualizado
