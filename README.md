@@ -4,9 +4,9 @@ Os propociono una plantilla realizada con Laravel 11 y Docker para vuestros proy
 
 ## Tecnologías Utilizadas
 
-### Apache
-### PHP 8
-### Mysql
+### - Apache
+### - PHP 8
+### - Mysql
 
 
 
