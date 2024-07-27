@@ -14,14 +14,21 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN a2enmod rewrite
 
-RUN docker-php-ext-install pdo_mysql zip curl \
-    xml 
+COPY ./docker/apache/apache-config.conf /etc/apache2/sites-available/000-default.conf
 
-ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
+ENV APACHE_DOCUMENT_ROOT /var/www/html/public
+
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
-COPY . /var/www/html
+RUN docker-php-ext-install pdo_mysql zip curl \
+    xml 
+
+USER root
+
+RUN cp .env.example .env
+
+COPY . .
 
 WORKDIR /var/www/html
 
@@ -31,7 +38,16 @@ RUN composer install
 
 RUN chown -R www-data:www-data /var/www/html \
     && chmod 775 -R /var/www/html 
+    
+
+RUN chmod -R 777 /var/www/html/storage
 
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-RUN chmod -R 777 /var/www/html/storage
+USER www-data
+
+# Expose port 80 for Apache.
+EXPOSE 80
+
+# Start Apache web server.
+CMD ["/usr/sbin/apachectl", "-D", "FOREGROUND"]

@@ -1,6 +1,6 @@
 UID=$(shell id -u)
 GID=$(shell id -g)
-DOCKER_PHP_SERVICE=php-fpm
+DOCKER_PHP_SERVICE=app
 
 start: erase cache-folders build composer-install up
 

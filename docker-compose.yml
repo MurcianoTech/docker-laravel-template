@@ -4,23 +4,25 @@ services:
   app:
     build:
       context: .
-      dockerfile: docker/php/Dockerfile
+      dockerfile: docker/Dockerfile
+    container_name: laravel-app
     ports:
-      - "8000:80"
+      - 8080:80
     volumes:
         - .:/var/www/html
+    environment:
+      - APACHE_DOCUMENT_ROOT=/var/www/html/public
     depends_on:
-      - db
+      - mysql
     networks:
       - app-network
           
-  db:
+  mysql:
     image: mysql
     restart: always
+    container_name: mysql-app
     ports:
-      - "3306:3306"
-    networks:
-      - app-network
+      - 3306:3306
     environment:
         MYSQL_ROOT_PASSWORD: root
         MYSQL_DATABASE: refactorian
@@ -28,6 +30,8 @@ services:
         MYSQL_PASSWORD: refactorian
     volumes:
       - dbdata:/var/lib/mysql
+    networks:
+      - app-network
 
 
 networks:
