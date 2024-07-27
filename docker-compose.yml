@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  php-fpm:
+  app:
     build:
       context: .
       dockerfile: docker/php/Dockerfile
@@ -32,6 +32,6 @@ services:
 
 networks:
   app-network:
-  
+
 volumes:
   dbdata:
