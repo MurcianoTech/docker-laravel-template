@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  php-fpm:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    ports:
+      - "8000:80"
+    volumes:
+        - .:/var/www/html
+    depends_on:
+      - db
+    networks:
+      - app-network
+          
+  db:
+    image: mysql
+    restart: always
+    ports:
+      - "3306:3306"
+    networks:
+      - app-network
+    environment:
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_DATABASE: refactorian
+        MYSQL_USER: refactorian
+        MYSQL_PASSWORD: refactorian
+    volumes:
+      - dbdata:/var/lib/mysql
+
+
+networks:
+  app-network:
+  
+volumes:
+  dbdata:
