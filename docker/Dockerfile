@@ -26,9 +26,9 @@ RUN docker-php-ext-install pdo_mysql zip curl \
 
 USER root
 
-RUN cp .env.example .env
-
 COPY . .
+
+RUN cp .env.example .env
 
 WORKDIR /var/www/html
 
@@ -39,10 +39,13 @@ RUN composer install
 RUN chown -R www-data:www-data /var/www/html \
     && chmod 775 -R /var/www/html 
     
-
 RUN chmod -R 777 /var/www/html/storage
 
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+
+RUN chmod -R 777 ./storage/
+
+RUN php artisan key:generate
 
 USER www-data
 
